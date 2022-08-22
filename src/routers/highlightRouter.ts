@@ -78,6 +78,7 @@ highlightRouter.post(
       const highlightRecord = {
         creator: req.body.creator,
         workId: req.body.workId,
+        highlightId: req.body.highlightId,
         chapterId: req.body.chapterId,
         startTag: req.body.startTag,
         endTag: req.body.endTag,
