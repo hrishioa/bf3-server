@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
+import { In } from 'typeorm';
 import BF3DataSource from '../db/bf3-data-source';
 import { Highlight } from '../db/entities/Highlight';
 
@@ -20,6 +21,39 @@ type UpsertHighlightRequest = Request<
   never
 >;
 
+type GetHighlightRequest = Request<
+  unknown,
+  unknown,
+  {
+    creators?: string[];
+    workId: number;
+  },
+  never
+>;
+
+highlightRouter.post(
+  '/getAllForWork',
+  asyncHandler(async (req: GetHighlightRequest, res: Response) => {
+    const highlightQuery: any = {
+      where: {
+        workId: req.body.workId,
+      },
+    };
+
+    if (req.body.creators && req.body.creators.length)
+      highlightQuery.where.creator = In(req.body.creators);
+
+    const HighlightRepository = BF3DataSource.getRepository(Highlight);
+
+    const existingHighlights = await HighlightRepository.find(highlightQuery);
+
+    res.send({
+      success: true,
+      highlights: existingHighlights
+    });
+  }),
+);
+
 highlightRouter.post(
   '/upsert',
   asyncHandler(async (req: UpsertHighlightRequest, res: Response) => {
@@ -32,8 +66,8 @@ highlightRouter.post(
         workId: req.body.workId,
         chapterId: req.body.chapterId,
         startTag: req.body.startTag,
-        endTag: req.body.endTag
-      }
+        endTag: req.body.endTag,
+      },
     });
 
     const highlightRecord = {
@@ -42,23 +76,26 @@ highlightRouter.post(
       chapterId: req.body.chapterId,
       startTag: req.body.startTag,
       endTag: req.body.endTag,
-      note: req.body.note
+      note: req.body.note,
     };
 
-    console.log('Highlight record is ',highlightRecord,', and type is ',req.body.opType);
-
-    if(existingHighlight.length) {
-      if(req.body.opType === 'delete') {
-        console.log('Deleting existing highlight ',existingHighlight);
+    if (existingHighlight.length) {
+      if (req.body.opType === 'delete') {
+        await HighlightRepository.remove(existingHighlight);
       } else {
-        console.log('Updating');
+        await HighlightRepository.save({
+          ...highlightRecord,
+          ...{
+            id: existingHighlight[0].id,
+          },
+        });
       }
     } else {
-      console.log('Inserting');
+      await HighlightRepository.insert(highlightRecord);
     }
 
     res.send({
-      success: true
+      success: true,
     });
   }),
 );

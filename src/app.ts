@@ -24,7 +24,7 @@ BF3DataSource.initialize()
     console.log('DB connected.');
 
     const app = express();
-    const port = process.env.PORT || 6000;
+    const port = process.env.PORT || 4000;
 
     app.set('trust proxy', true);
 
