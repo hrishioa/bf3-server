@@ -11,6 +11,9 @@ export class Highlight {
   @PrimaryGeneratedColumn({ name: 'id' })
   public id: number;
 
+  @Column({name: 'highlight_id'})
+  public highlightId: number;
+
   @Column({ name: 'creator_username' })
   public creator: string;
 
