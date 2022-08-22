@@ -16,7 +16,7 @@ export const corsOptions = {
   credentials: true,
   methods: ['POST', 'GET'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'sentry-trace'],
-  origin: ['http://localhost:3000', 'https://archiveofherown.org'],
+  origin: true,
 };
 
 BF3DataSource.initialize()
