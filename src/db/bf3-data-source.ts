@@ -15,8 +15,8 @@ const config: DataSourceOptions = {
   database: process.env.BF3_DB_NAME,
   synchronize: false,
   migrationsRun: true,
-  logging: ['query', 'error'],
-  logger: 'advanced-console',
+  // logging: ['query', 'error'],
+  // logger: 'advanced-console',
   entities: [__dirname + '/entities/**/*{.ts,.js}'],
   migrations: [__dirname + '/migrations/**/{*.ts,.js}'],
 };
