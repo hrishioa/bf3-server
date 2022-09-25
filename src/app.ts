@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import highlightRouter from './routers/highlightRouter';
 import handleExpressException from './util/errorHandler';
 import preferencesRouter from './routers/preferencesRouter';
+import userWorkRouter from './routers/workRouter';
 
 const routers = [
   {
@@ -14,6 +15,10 @@ const routers = [
   {
     path: '/preferences',
     router: preferencesRouter,
+  },
+  {
+    path: '/userwork',
+    router: userWorkRouter,
   },
 ];
 
