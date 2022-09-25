@@ -4,11 +4,16 @@ import cors from 'cors';
 import morgan from 'morgan';
 import highlightRouter from './routers/highlightRouter';
 import handleExpressException from './util/errorHandler';
+import preferencesRouter from './routers/preferencesRouter';
 
 const routers = [
   {
     path: '/highlight',
     router: highlightRouter,
+  },
+  {
+    path: '/preferences',
+    router: preferencesRouter,
   },
 ];
 
